@@ -52,19 +52,6 @@ fun App() {
     }
 }
 
-// 1. Definiere Routen
-sealed class Screen(
-    val route: String,
-) {
-    object Home : Screen("home")
-
-    object Details : Screen("details/{id}") {
-        fun createRoute(id: String) = "details/$id"
-    }
-}
-
-private const val ID_NAVIGATION_PARAMETER = "id"
-
 @Serializable
 object Home
 
