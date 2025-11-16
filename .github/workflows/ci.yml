@@ -41,6 +41,7 @@ jobs:
 
   test-jvm:
     name: Test (JVM)
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     
@@ -79,6 +80,7 @@ jobs:
 
   test-ios:
     name: Test (iOS)
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
     runs-on: macos-14
     timeout-minutes: 20
     
