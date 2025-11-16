@@ -21,7 +21,7 @@ kotlin {
 
     listOf(
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
@@ -58,7 +58,6 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
-
             implementation(libs.androidx.navigation3.runtime)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -74,12 +73,21 @@ kotlin {
 
 android {
     namespace = "com.mouse.mouse"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "com.mouse.mouse"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.android.targetSdk
+                .get()
+                .toInt()
         versionCode = 1
         versionName = "1.0"
     }
@@ -116,7 +124,7 @@ kover {
                     "*BuildConfig*",
                     "*.di.*",
                     "*_Factory*",
-                    "*_Impl*"
+                    "*_Impl*",
                 )
             }
         }

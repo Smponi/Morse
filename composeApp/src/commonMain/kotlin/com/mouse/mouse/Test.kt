@@ -30,7 +30,6 @@ import mouse.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-
 @Composable
 @Preview
 fun Test() {
@@ -38,7 +37,7 @@ fun Test() {
     val scope = rememberCoroutineScope()
     MaterialTheme {
         Scaffold(
-            snackbarHost = { SnackbarHost(snackbarHostState) }
+            snackbarHost = { SnackbarHost(snackbarHostState) },
         ) { paddingValues ->
             Button(
                 onClick = {
@@ -46,11 +45,10 @@ fun Test() {
                         snackbarHostState.showSnackbar("Snackbar Test")
                     }
                 },
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues),
             ) {
                 Text("OK")
             }
         }
     }
 }
-

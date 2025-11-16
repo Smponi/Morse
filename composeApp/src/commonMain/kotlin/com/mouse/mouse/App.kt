@@ -38,12 +38,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
 import mouse.composeapp.generated.resources.Res
 import mouse.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.Resource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
@@ -52,9 +51,13 @@ fun App() {
         AppNavigation()
     }
 }
+
 // 1. Definiere Routen
-sealed class Screen(val route: String) {
+sealed class Screen(
+    val route: String,
+) {
     object Home : Screen("home")
+
     object Details : Screen("details/{id}") {
         fun createRoute(id: String) = "details/$id"
     }
@@ -66,7 +69,9 @@ private const val ID_NAVIGATION_PARAMETER = "id"
 object Home
 
 @Serializable
-data class Details(val id: Int)
+data class Details(
+    val id: Int,
+)
 
 // Navigation Setup
 @Composable
@@ -78,7 +83,7 @@ fun AppNavigation() {
             HomeScreen(
                 onNavigateToDetails = { id ->
                     navController.navigate(Details(id))
-                }
+                },
             )
         }
 
@@ -86,56 +91,58 @@ fun AppNavigation() {
             val details = backStackEntry.toRoute<Details>()
             DetailsScreen(
                 id = details.id,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
             )
         }
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(onNavigateToDetails: (Int) -> Unit) {
-    val items = remember {
-        listOf(
-            "Kotlin" to "Moderne Programmiersprache",
-            "Compose" to "Deklaratives UI Framework",
-            "Coroutines" to "Asynchrone Programmierung"
-        )
-    }
+    val items =
+        remember {
+            listOf(
+                "Kotlin" to "Moderne Programmiersprache",
+                "Compose" to "Deklaratives UI Framework",
+                "Coroutines" to "Asynchrone Programmierung",
+            )
+        }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Home") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    ),
             )
-        }
+        },
     ) { padding ->
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding),
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             items(items.size) { index ->
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { onNavigateToDetails(index) }
+                    onClick = { onNavigateToDetails(index) },
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = items[index].first,
-                            style = MaterialTheme.typography.titleLarge
+                            style = MaterialTheme.typography.titleLarge,
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = items[index].second,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
@@ -146,13 +153,17 @@ fun HomeScreen(onNavigateToDetails: (Int) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailsScreen(id: Int, onBack: () -> Unit) {
-    val content = when (id) {
-        0 -> "Kotlin" to "Statisch typisierte Sprache für JVM, Android, Browser und Native"
-        1-> "Compose" to "Jetpack Compose macht Android UI-Entwicklung einfacher"
-        2 -> "Coroutines" to "Leichtgewichtige Threads für asynchrone Operationen"
-        else -> "Unbekannt" to "Keine Details verfügbar"
-    }
+fun DetailsScreen(
+    id: Int,
+    onBack: () -> Unit,
+) {
+    val content =
+        when (id) {
+            0 -> "Kotlin" to "Statisch typisierte Sprache für JVM, Android, Browser und Native"
+            1 -> "Compose" to "Jetpack Compose macht Android UI-Entwicklung einfacher"
+            2 -> "Coroutines" to "Leichtgewichtige Threads für asynchrone Operationen"
+            else -> "Unbekannt" to "Keine Details verfügbar"
+        }
 
     Scaffold(
         topBar = {
@@ -162,30 +173,31 @@ fun DetailsScreen(id: Int, onBack: () -> Unit) {
                     OutlinedButton(onClick = onBack) {
                         Text("Zurck")
                     }
-                }
+                },
             )
-        }
+        },
     ) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(24.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(24.dp),
         ) {
             Text(
                 text = content.first,
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = content.second,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
             )
             Spacer(modifier = Modifier.height(24.dp))
             OutlinedButton(
                 onClick = onBack,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text("Zurück zur Übersicht")
             }
