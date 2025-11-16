@@ -68,7 +68,7 @@ jobs:
         run: ./gradlew testDebugUnitTest :composeApp:testDebugUnitTest
       
       - name: Generate Coverage
-        run: ./gradlew koverXmlReportDebug koverHtmlReportDebug
+        run: ./gradlew :composeApp:koverXmlReport :composeApp:koverHtmlReport
       
       # - name: Upload Coverage to Codecov
       #   uses: codecov/codecov-action@v4

@@ -7,6 +7,9 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     kotlin("plugin.serialization") version "2.0.21"
+    id("org.jlleitschuh.gradle.ktlint")
+    id("io.gitlab.arturbosch.detekt")
+    id("org.jetbrains.kotlinx.kover")
 }
 
 kotlin {
@@ -100,3 +103,22 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
+detekt {
+    config.setFrom(files("$rootDir/config/detekt.yml"))
+    buildUponDefaultConfig = true
+}
+
+kover {
+    reports {
+        filters {
+            excludes {
+                classes(
+                    "*BuildConfig*",
+                    "*.di.*",
+                    "*_Factory*",
+                    "*_Impl*"
+                )
+            }
+        }
+    }
+}
