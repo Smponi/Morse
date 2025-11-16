@@ -65,7 +65,7 @@ jobs:
             gradle-${{ runner.os }}-
       
       - name: Run Tests
-        run: ./gradlew testDebugUnitTest :shared:testDebugUnitTest
+        run: ./gradlew testDebugUnitTest :composeApp:testDebugUnitTest
       
       - name: Generate Coverage
         run: ./gradlew koverXmlReportDebug koverHtmlReportDebug
@@ -118,7 +118,7 @@ jobs:
             pods-${{ runner.os }}-
       
       - name: Run iOS Tests
-        run: ./gradlew :shared:iosSimulatorArm64Test
+        run: ./gradlew :composeApp:iosSimulatorArm64Test
       
       # - name: Upload iOS Coverage
       #   uses: codecov/codecov-action@v4
@@ -205,4 +205,4 @@ jobs:
             pods-${{ runner.os }}-
       
       - name: Build iOS Framework
-        run: ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
+        run: ./gradlew :composeApp:linkDebugFrameworkIosSimulatorArm64
