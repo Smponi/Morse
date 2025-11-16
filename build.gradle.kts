@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     kotlin("plugin.serialization") version "2.0.21"
     id("org.jetbrains.kotlinx.kover") version "0.9.3"
+    id("org.jlleitschuh.gradle.ktlint") version "14.0.1" apply false
+    id("io.gitlab.arturbosch.detekt") version "1.23.8" apply false
 }
 
 kover {

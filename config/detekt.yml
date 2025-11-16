@@ -1,0 +1,13 @@
+# TODO
+build:
+  maxIssues: 0
+
+complexity:
+  LongMethod:
+    active: true
+    threshold: 50
+
+style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 130
