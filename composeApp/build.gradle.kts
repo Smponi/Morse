@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -7,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    kotlin("plugin.serialization") version "2.0.21"
 }
 
 kotlin {
@@ -60,6 +60,8 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             api(libs.koin.core)
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
