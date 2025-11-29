@@ -1,6 +1,5 @@
 package com.mouse.mouse.presentation.viewmodel
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +49,10 @@ class MorseSuiteViewModel : ViewModel() {
         private set
     
     var isSignalActive by mutableStateOf(false)
+        private set
+    
+    // Playback Progress: Welcher Character wird gerade gespielt (-1 = nicht spielend)
+    var playbackIndex by mutableStateOf(-1)
         private set
     
     // ==================== Computed Properties ====================
@@ -164,26 +167,23 @@ class MorseSuiteViewModel : ViewModel() {
     /**
      * Startet die Morse-Signal-Übertragung
      */
-    suspend fun transmitSignal(context: Context) {
+    suspend fun transmitSignal() {
         val morse = morseToTransmit
         if (morse.isEmpty()) return
         
         // Zur History hinzufügen
         addToHistory()
         
-        // Transmitter initialisieren (lazy)
+        // Transmitter initialisieren (lazy) - beim ersten Aufruf
         if (transmitter == null) {
-            transmitter = MorseTransmitter(context).apply {
-                onSignalStateChanged = { active ->
-                    isSignalActive = active
-                }
-            }
+            transmitter = createTransmitter()
         }
         
         isPlaying = true
         transmitter?.transmit(morse, activeModes.toList())
         isPlaying = false
         isSignalActive = false
+        playbackIndex = -1 // Reset nach Playback
     }
     
     /**
@@ -193,6 +193,7 @@ class MorseSuiteViewModel : ViewModel() {
         transmitter?.stop()
         isPlaying = false
         isSignalActive = false
+        playbackIndex = -1 // Reset
     }
     
     /**
@@ -220,6 +221,23 @@ class MorseSuiteViewModel : ViewModel() {
         } else {
             morseInput = MorseDictionary.textToMorse(text)
             textInput = text
+        }
+    }
+    
+    // ==================== Platform-specific Initialization ====================
+    
+    /**
+     * Erstellt einen platform-spezifischen Transmitter
+     * Muss von platform-spezifischem Code aufgerufen werden
+     */
+    private fun createTransmitter(): MorseTransmitter {
+        return MorseTransmitter().apply {
+            onSignalStateChanged = { active ->
+                isSignalActive = active
+            }
+            onPlaybackProgress = { index ->
+                playbackIndex = index
+            }
         }
     }
 }

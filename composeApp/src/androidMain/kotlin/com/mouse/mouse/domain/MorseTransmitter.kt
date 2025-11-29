@@ -7,17 +7,18 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import com.mouse.mouse.data.model.OutputMode
+import com.mouse.mouse.platform.getAndroidContext
 import kotlinx.coroutines.delay
 
 /**
- * Hardware-Controller für Morse-Signal-Übertragung
+ * Android Implementation des Morse Transmitters
  * 
  * Verantwortlich für:
- * - Abspielen von Morse-Code über Hardware (Vibration, Licht, Sound)
+ * - Abspielen von Morse-Code über Android Hardware (Vibration, Licht)
  * - Timing der Signale nach Morse-Standard
  * - Hardware-Zugriff (Vibrator, Camera Flash)
  */
-class MorseTransmitter(private val context: Context) {
+actual class MorseTransmitter {
     
     // Morse-Timing Konstanten (basierend auf WPM - Words Per Minute)
     // Aktuell: ~10 WPM (120ms pro Zeiteinheit)
@@ -30,32 +31,33 @@ class MorseTransmitter(private val context: Context) {
     private var isTransmitting = false
     
     // Callback für UI-Updates (z.B. Visualizer)
-    var onSignalStateChanged: ((Boolean) -> Unit)? = null
+    actual var onSignalStateChanged: ((Boolean) -> Unit)? = null
     
-    /**
-     * Überträgt einen Morse-Code String
-     * 
-     * @param morseCode Der zu übertragende Morse-Code (z.B. "... --- ...")
-     * @param activeModes Welche Output-Methoden aktiv sind
-     * @return true wenn erfolgreich übertragen, false wenn abgebrochen
-     */
-    suspend fun transmit(morseCode: String, activeModes: List<OutputMode>): Boolean {
+    // Callback für Playback Progress (welches Zeichen wird gerade gespielt)
+    actual var onPlaybackProgress: ((currentIndex: Int) -> Unit)? = null
+    
+    actual suspend fun transmit(morseCode: String, activeModes: List<OutputMode>): Boolean {
+        val ctx = getAndroidContext() ?: return false
         if (isTransmitting || morseCode.isEmpty()) return false
         
         isTransmitting = true
         
         // Hardware initialisieren
-        val vibrator = getVibrator()
-        val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        val vibrator = getVibrator(ctx)
+        val cameraManager = ctx.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         val cameraId = try { cameraManager.cameraIdList.firstOrNull() } catch (e: Exception) { null }
         
         // Morse-Code Zeichen für Zeichen abspielen
-        morseCode.forEach { symbol ->
+        morseCode.forEachIndexed { index, symbol ->
             if (!isTransmitting) {
                 // Vorzeitiger Abbruch
                 signalOff(cameraManager, cameraId)
+                onPlaybackProgress?.invoke(-1) // Reset
                 return false
             }
+            
+            // UI benachrichtigen über aktuellen Progress
+            onPlaybackProgress?.invoke(index)
             
             when (symbol) {
                 '.' -> playDot(vibrator, cameraManager, cameraId, activeModes)
@@ -65,22 +67,19 @@ class MorseTransmitter(private val context: Context) {
             }
         }
         
+        // Playback beendet
+        onPlaybackProgress?.invoke(-1) // Reset
+        
         isTransmitting = false
         signalOff(cameraManager, cameraId)
         return true
     }
     
-    /**
-     * Stoppt die aktuelle Übertragung
-     */
-    fun stop() {
+    actual fun stop() {
         isTransmitting = false
     }
     
-    /**
-     * Gibt zurück ob gerade eine Übertragung läuft
-     */
-    fun isTransmitting(): Boolean = isTransmitting
+    actual fun isTransmitting(): Boolean = isTransmitting
     
     // ==================== Private Helper Methods ====================
     
@@ -156,13 +155,13 @@ class MorseTransmitter(private val context: Context) {
         }
     }
     
-    private fun getVibrator(): Vibrator {
+    private fun getVibrator(ctx: Context): Vibrator {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibratorManager = ctx.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
             vibratorManager.defaultVibrator
         } else {
             @Suppress("DEPRECATION")
-            context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            ctx.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         }
     }
 }

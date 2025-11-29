@@ -28,6 +28,10 @@ import com.mouse.mouse.ui.theme.AppDimensions
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Initialisiere Platform Context
+        com.mouse.mouse.platform.initializeHardware(this)
+        
         setContent {
             MaterialTheme(
                 colorScheme = darkColorScheme(

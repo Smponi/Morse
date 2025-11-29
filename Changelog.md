@@ -159,3 +159,100 @@ com.mouse.mouse/
 - Business Logic getrennt in MorseDictionary
 - State Management zentralisiert im ViewModel
 
+
+## 29/11/2024 - 21:15 - Animated Playback Progress
+
+### ✨ Neue Features
+- **Animierter Playback Progress in OutputCard**
+  - Bereits gespielte Morse-Zeichen werden ausgegraut (30% Opacity)
+  - Aktuell gespieltes Zeichen wird hervorgehoben (100% Opacity)
+  - Smooth Animationen mit `animateFloatAsState`
+  - Nach Playback-Ende: Alles wieder normal
+
+### 🔧 Technische Implementierung
+- **MorseTransmitter**: Neuer `onPlaybackProgress` Callback
+  - Benachrichtigt UI über aktuellen Character-Index
+  - Wird bei jedem gespielten Zeichen aufgerufen
+  
+- **ViewModel**: Neuer `playbackIndex` State
+  - Tracked welcher Character gerade gespielt wird
+  - -1 = nicht spielend (default)
+  
+- **OutputCard**: Komplett überarbeitet
+  - Neue `AnimatedMorseText` Composable
+  - Verwendet `buildAnnotatedString` für per-character styling
+  - Smooth Opacity-Transitions pro Zeichen
+
+### 🎨 UX Verbesserungen
+- User sieht genau wo im Code die Wiedergabe gerade ist
+- Besseres Verständnis des Morse-Timings
+- Visuell ansprechende Feedback-Animation
+
+
+## 29/11/2024 - 21:45 - Kotlin Multiplatform Refactoring
+
+### 🎯 Projekt ist jetzt echtes Kotlin Multiplatform!
+
+**Vorher:** Code war nur in `androidMain` → nicht iOS-kompatibel  
+**Jetzt:** Saubere Trennung `commonMain` vs `androidMain`
+
+### 📁 Neue Multiplatform-Struktur
+
+#### commonMain (Platform-agnostic Code)
+- ✅ **data/** - Models & Repository (shared)
+- ✅ **domain/** - Business Logic (shared)
+  - MorseDictionary: Übersetzung
+  - MorseTransmitter: expect/actual Pattern
+- ✅ **presentation/** - Komplettes UI (shared!)
+  - viewmodel/
+  - screens/
+  - components/
+- ✅ **ui/theme/** - Design System (shared)
+
+#### androidMain (Android-specific)
+- ✅ **MainActivity** - Android Entry Point
+- ✅ **MorseTransmitter (actual)** - Android Hardware
+- ✅ **PlatformContext** - Context Wrapper
+- ✅ **Platform.android.kt** - Platform Info
+
+#### iosMain (Vorbereitet für iOS)
+- 🔜 MainViewController
+- 🔜 MorseTransmitter (actual) - iOS Hardware
+
+### 🔧 Technische Highlights
+
+**expect/actual Pattern:**
+```kotlin
+// commonMain
+expect class MorseTransmitter() {
+    suspend fun transmit(...)
+}
+
+// androidMain
+actual class MorseTransmitter {
+    // Android Vibrator + Camera Flash Implementation
+}
+```
+
+**Platform Context:**
+```kotlin
+// Initialize in MainActivity
+initializeHardware(this)  // Android Context
+
+// Later use in Transmitter
+val ctx = getAndroidContext()
+```
+
+### ✅ Vorteile
+
+1. **iOS-Ready:** UI-Code ist bereits iOS-kompatibel
+2. **Code-Sharing:** ~95% Code-Sharing zwischen Platforms
+3. **Klare Trennung:** Platform-Code nur wo nötig
+4. **Wartbar:** Saubere Architektur
+
+### 📊 Code-Verteilung
+
+- commonMain: **18 Files** (Data, Domain, UI)
+- androidMain: **4 Files** (Platform-specific)
+- Sharing Rate: **~95%**
+

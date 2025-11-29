@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.mouse.mouse.data.model.InputMode
 import com.mouse.mouse.presentation.components.*
 import com.mouse.mouse.presentation.viewmodel.MorseSuiteViewModel
@@ -21,7 +20,6 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun TransmitterScreen(viewModel: MorseSuiteViewModel) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var showCameraScanner by remember { mutableStateOf(false) }
 
@@ -71,7 +69,8 @@ fun TransmitterScreen(viewModel: MorseSuiteViewModel) {
                 if (viewModel.displayBottom.isNotEmpty()) {
                     OutputCard(
                         text = viewModel.displayBottom,
-                        label = if(viewModel.inputMode == InputMode.TEXT) "MORSE OUTPUT" else "TEXT TRANSLATION"
+                        label = if(viewModel.inputMode == InputMode.TEXT) "MORSE OUTPUT" else "TEXT TRANSLATION",
+                        playbackIndex = viewModel.playbackIndex
                     )
                 }
             }
@@ -88,7 +87,7 @@ fun TransmitterScreen(viewModel: MorseSuiteViewModel) {
                 
                 Spacer(modifier = Modifier.height(AppDimensions.Spacing.small))
                 Button(
-                    onClick = { scope.launch { viewModel.transmitSignal(context) } },
+                    onClick = { scope.launch { viewModel.transmitSignal() } },
                     modifier = Modifier.fillMaxWidth().height(AppDimensions.Height.buttonMedium),
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(AppDimensions.CornerRadius.medium),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
@@ -106,7 +105,7 @@ fun TransmitterScreen(viewModel: MorseSuiteViewModel) {
                 Spacer(modifier = Modifier.height(AppDimensions.Spacing.medium))
                 PlayButton(
                     isPlaying = viewModel.isPlaying,
-                    onPlay = { scope.launch { viewModel.transmitSignal(context) } },
+                    onPlay = { scope.launch { viewModel.transmitSignal() } },
                     onStop = viewModel::stopTransmission,
                     enabled = viewModel.displayBottom.isNotEmpty()
                 )
