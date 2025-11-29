@@ -334,3 +334,81 @@ val ctx = getAndroidContext()
 - ✅ Kompakte, effiziente UI
 - ✅ Copy-Funktion für bessere UX
 
+
+## 29/11/2024 - 22:15 - Morse Keyboard Redesign
+
+### 🎹 Komplett neues Morse-Keyboard Design
+
+**Alte Probleme:**
+- ❌ Telegraph Pads sahen nicht gut aus
+- ❌ Gradient-Hintergrund war zu viel
+- ❌ Keine klare Unterscheidung Letter vs Word Space
+- ❌ Kein gutes haptisches Feedback
+- ❌ Zu groß (160dp Höhe)
+
+**Neues Design:**
+- ✅ Moderne, minimalistische Cards (120dp Höhe)
+- ✅ Klare DOT (·) und DASH (─) Symbole
+- ✅ Press-Animation (0.95x scale beim Drücken)
+- ✅ Subtle Elevation für Depth
+- ✅ Dekorativer Kreis im Hintergrund (10% opacity)
+
+### 🔘 Neue Button-Struktur
+
+**Row 1: Signal-Eingabe (120dp)**
+```
+┌─────────────┬─────────────┐
+│   DOT (·)   │  DASH (─)   │
+│   Primary   │  Secondary  │
+└─────────────┴─────────────┘
+```
+
+**Row 2: Utility-Leiste (56dp)**
+```
+┌────────┬────────┬────────┐
+│ LETTER │  WORD  │  ⌫    │
+│ Space  │ Space  │ Delete │
+└────────┴────────┴────────┘
+```
+
+### 📝 Neue Funktionalität
+
+**Letter Space Button:**
+- Fügt ` ` (Space) ein
+- Trennt Buchstaben: `... --- ...` = SOS
+
+**Word Space Button:**
+- Fügt ` / ` (Slash) ein
+- Trennt Wörter: `.... . .-.. .-.. --- / .-- --- .-. .-.. -..` = HELLO WORLD
+- Icon: SpaceBar Symbol
+
+**Delete Button:**
+- Kompakt (72dp breit)
+- Error Container Farbe
+- Backspace Icon
+
+### 🎨 Visuelles Feedback
+
+**Press-Animation:**
+```kotlin
+detectTapGestures(
+    onPress = {
+        scale → 0.95f  // Button "drückt sich ein"
+        haptic feedback
+    }
+)
+```
+
+**Button States:**
+- Normal: 1.0 scale, 4dp elevation
+- Pressed: 0.95 scale, 0dp elevation
+- Transition: 150ms smooth animation
+
+### 🎯 Verbesserungen
+
+1. **Kompakter:** 160dp → 120dp (-25%)
+2. **Klarer:** Separate Letter/Word Space Buttons
+3. **Schöner:** Modernes Material Design
+4. **Besser:** Tactile Press-Feedback
+5. **Vollständig:** Alle Morse-Zeichen möglich (inkl. Worttrennung)
+

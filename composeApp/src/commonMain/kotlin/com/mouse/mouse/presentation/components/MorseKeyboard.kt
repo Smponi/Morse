@@ -1,8 +1,8 @@
 package com.mouse.mouse.presentation.components
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,13 +10,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Backspace
 import androidx.compose.material.icons.rounded.SpaceBar
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,104 +25,160 @@ import androidx.compose.ui.unit.sp
 import com.mouse.mouse.ui.theme.AppDimensions
 
 /**
- * Morse Keyboard Component
+ * Redesigned Morse Keyboard Component
  * 
- * Custom Keyboard für Morse-Code Eingabe:
- * - Große DOT (.) und DASH (-) Pads
- * - Space Button (trennt Buchstaben)
- * - Delete Button
- * 
- * @param onDot Callback wenn DOT gedrückt wird
- * @param onDash Callback wenn DASH gedrückt wird
- * @param onSpace Callback wenn SPACE gedrückt wird
- * @param onDelete Callback wenn DELETE gedrückt wird
+ * Modernes, minimalistisches Design:
+ * - Große Touch-Targets für DOT und DASH
+ * - Separate Buttons für Letter Space und Word Space
+ * - Clear visuelles Feedback
+ * - Smooth Press-Animationen
  */
 @Composable
 fun MorseKeyboard(
     onDot: () -> Unit,
     onDash: () -> Unit,
-    onSpace: () -> Unit,
+    onLetterSpace: () -> Unit,
+    onWordSpace: () -> Unit,
     onDelete: () -> Unit
 ) {
-    val haptic = LocalHapticFeedback.current
-
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(AppDimensions.Spacing.medium)
+        verticalArrangement = Arrangement.spacedBy(AppDimensions.Spacing.small)
     ) {
-        // ROW 1: SIGNAL PADS (DOT & DASH)
+        // Row 1: DOT und DASH (die Haupteingabe)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(AppDimensions.Height.telegraphPad),
-            horizontalArrangement = Arrangement.spacedBy(AppDimensions.Spacing.medium)
-        ) {
-            // DOT PAD
-            TelegraphPad(
-                modifier = Modifier.weight(1f),
-                color = MaterialTheme.colorScheme.primary,
-                symbol = "●",
-                subLabel = "SHORT",
-                onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-                    onDot()
-                }
-            )
-
-            // DASH PAD
-            TelegraphPad(
-                modifier = Modifier.weight(1f),
-                color = MaterialTheme.colorScheme.secondary,
-                symbol = "▬",
-                subLabel = "LONG",
-                onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                    onDash()
-                }
-            )
-        }
-
-        // ROW 2: UTILITY BUTTONS
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(AppDimensions.Height.keyboardRow),
+                .height(120.dp),
             horizontalArrangement = Arrangement.spacedBy(AppDimensions.Spacing.small)
         ) {
-            // SPACE BUTTON
-            Button(
-                onClick = onSpace,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                shape = RoundedCornerShape(AppDimensions.CornerRadius.medium),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                ),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
-            ) {
-                Icon(Icons.Rounded.SpaceBar, contentDescription = null)
-                Spacer(Modifier.width(AppDimensions.Spacing.xSmall))
-                Text("SPACE", fontWeight = FontWeight.Bold)
-            }
+            MorseButton(
+                modifier = Modifier.weight(1f),
+                label = "·",
+                sublabel = "DOT",
+                color = MaterialTheme.colorScheme.primary,
+                onClick = onDot
+            )
+            
+            MorseButton(
+                modifier = Modifier.weight(1f),
+                label = "─",
+                sublabel = "DASH",
+                color = MaterialTheme.colorScheme.secondary,
+                onClick = onDash
+            )
+        }
+        
+        // Row 2: Utility Buttons (Letter Space, Word Space, Delete)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            horizontalArrangement = Arrangement.spacedBy(AppDimensions.Spacing.xSmall)
+        ) {
+            // Letter Space (trennt Buchstaben)
+            UtilityButton(
+                modifier = Modifier.weight(1f),
+                icon = null,
+                text = "LETTER",
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                textColor = MaterialTheme.colorScheme.onSurface,
+                onClick = onLetterSpace
+            )
+            
+            // Word Space (Slash für Wörter)
+            UtilityButton(
+                modifier = Modifier.weight(1f),
+                icon = Icons.Rounded.SpaceBar,
+                text = "WORD",
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                textColor = MaterialTheme.colorScheme.onSurface,
+                onClick = onWordSpace
+            )
+            
+            // Delete
+            UtilityButton(
+                modifier = Modifier.width(72.dp),
+                icon = Icons.AutoMirrored.Rounded.Backspace,
+                text = null,
+                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f),
+                textColor = MaterialTheme.colorScheme.error,
+                onClick = onDelete
+            )
+        }
+    }
+}
 
-            // DELETE BUTTON
-            Button(
-                onClick = onDelete,
+/**
+ * Morse Button Component (DOT/DASH)
+ * 
+ * Große, touch-freundliche Buttons mit Press-Animation
+ */
+@Composable
+private fun RowScope.MorseButton(
+    modifier: Modifier,
+    label: String,
+    sublabel: String,
+    color: Color,
+    onClick: () -> Unit
+) {
+    val haptic = LocalHapticFeedback.current
+    var isPressed by remember { mutableStateOf(false) }
+    
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        label = "button_scale"
+    )
+
+    Surface(
+        modifier = modifier
+            .fillMaxHeight()
+            .scale(scale)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        isPressed = true
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        tryAwaitRelease()
+                        isPressed = false
+                    },
+                    onTap = { onClick() }
+                )
+            },
+        shape = RoundedCornerShape(AppDimensions.CornerRadius.large),
+        color = color,
+        tonalElevation = if (isPressed) 0.dp else 4.dp
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Dekorativer Kreis im Hintergrund
+            Box(
                 modifier = Modifier
-                    .width(80.dp)
-                    .fillMaxHeight(),
-                shape = RoundedCornerShape(AppDimensions.CornerRadius.medium),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                    contentColor = MaterialTheme.colorScheme.error
-                ),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+                    .size(80.dp)
+                    .background(
+                        Color.White.copy(alpha = 0.1f),
+                        CircleShape
+                    )
+            )
+            
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Icon(
-                    Icons.AutoMirrored.Rounded.Backspace,
-                    contentDescription = "Delete"
+                Text(
+                    text = label,
+                    fontSize = 48.sp,
+                    fontWeight = FontWeight.Black,
+                    color = Color.White
+                )
+                Text(
+                    text = sublabel,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White.copy(alpha = 0.7f),
+                    letterSpacing = 1.5.sp
                 )
             }
         }
@@ -129,59 +186,45 @@ fun MorseKeyboard(
 }
 
 /**
- * Telegraph Pad Component
+ * Utility Button Component (Space, Delete)
  * 
- * Großes, touch-freundliches Pad für DOT oder DASH Eingabe
- * Mit Gradient-Hintergrund und dekorativem Kreis
+ * Kleinere Buttons für sekundäre Aktionen
  */
 @Composable
-fun RowScope.TelegraphPad(
+private fun UtilityButton(
     modifier: Modifier,
+    icon: androidx.compose.ui.graphics.vector.ImageVector?,
+    text: String?,
     color: Color,
-    symbol: String,
-    subLabel: String,
+    textColor: Color,
     onClick: () -> Unit
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxHeight()
-            .clip(RoundedCornerShape(AppDimensions.CornerRadius.xLarge))
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        color.copy(alpha = 0.8f),
-                        color.copy(alpha = 0.4f)
-                    )
-                )
-            )
-            .clickable { onClick() }
-            .border(
-                AppDimensions.Border.thin,
-                color.copy(alpha = 0.5f),
-                RoundedCornerShape(AppDimensions.CornerRadius.xLarge)
-            ),
-        contentAlignment = Alignment.Center
+    Button(
+        onClick = onClick,
+        modifier = modifier.fillMaxHeight(),
+        shape = RoundedCornerShape(AppDimensions.CornerRadius.medium),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = color,
+            contentColor = textColor
+        ),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp)
     ) {
-        // Dekorativer Hintergrund-Kreis
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(color.copy(alpha = 0.2f), CircleShape)
-        )
-
-        // Content (Symbol + Label)
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = symbol,
-                fontSize = 56.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Black
+        if (icon != null) {
+            Icon(
+                icon,
+                contentDescription = text,
+                modifier = Modifier.size(20.dp)
             )
+            if (text != null) {
+                Spacer(Modifier.width(6.dp))
+            }
+        }
+        if (text != null) {
             Text(
-                text = subLabel,
-                style = MaterialTheme.typography.labelSmall,
-                color = Color.White.copy(alpha = 0.6f),
-                letterSpacing = AppDimensions.LetterSpacing.medium
+                text,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold
             )
         }
     }

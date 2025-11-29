@@ -125,9 +125,24 @@ class MorseSuiteViewModel : ViewModel() {
      * Fügt ein Leerzeichen hinzu (trennt Buchstaben)
      * Wird vom Custom Keyboard aufgerufen
      */
-    fun appendSpace() {
+    fun appendLetterSpace() {
         if (!morseInput.endsWith(" ")) {
             morseInput += " "
+            textInput = MorseDictionary.morseToText(morseInput)
+        }
+    }
+    
+    /**
+     * Fügt ein Wort-Leerzeichen hinzu (/)
+     * Wird vom Custom Keyboard aufgerufen
+     */
+    fun appendWordSpace() {
+        if (!morseInput.endsWith(" / ")) {
+            // Stelle sicher dass vorher ein Letter Space ist
+            if (!morseInput.endsWith(" ")) {
+                morseInput += " "
+            }
+            morseInput += "/ "
             textInput = MorseDictionary.morseToText(morseInput)
         }
     }

@@ -81,7 +81,8 @@ fun TransmitterScreen(viewModel: MorseSuiteViewModel) {
                 MorseKeyboard(
                     onDot = { viewModel.appendMorse(".") },
                     onDash = { viewModel.appendMorse("-") },
-                    onSpace = { viewModel.appendSpace() },
+                    onLetterSpace = { viewModel.appendLetterSpace() },
+                    onWordSpace = { viewModel.appendWordSpace() },
                     onDelete = { viewModel.deleteLastMorse() }
                 )
                 
