@@ -104,3 +104,58 @@
   - MorseInputCard: reduzierte Abstände zwischen Elementen
   - OutputCard: einheitliches Spacing
   - PlaybackPanel: Material Icons für Play/Stop Buttons
+
+## 29/11/2024 - 20:45 - Major Refactoring: Clean Architecture
+
+### 🏗️ Architektur-Überarbeitung
+- **Komplette Code-Reorganisation** in Clean Architecture Pattern
+- Code aufgeteilt in 21 separate, gut dokumentierte Dateien
+- Jede Komponente in eigener Datei für bessere Wartbarkeit
+
+### 📁 Neue Package-Struktur
+```
+com.mouse.mouse/
+├── data/
+│   ├── model/ (MorseRecord, OutputMode, InputMode)
+│   └── repository/ (MorseHistoryRepository)
+├── domain/ (MorseDictionary, MorseTransmitter)
+├── presentation/
+│   ├── viewmodel/ (MorseSuiteViewModel)
+│   ├── screens/ (TransmitterScreen, HistoryScreen)
+│   ├── components/ (9 UI Components)
+│   └── MainActivity.kt
+└── ui/theme/ (Dimensions.kt - Design Tokens)
+```
+
+### 🎨 Design Token System
+- `AppDimensions.kt` mit allen Größen, Spacing, Corner Radius
+- Keine hardcoded Werte mehr
+- Konsistentes Design durch das gesamte Projekt
+
+### ✅ Bugs Behoben
+- **History speichert jetzt korrekt** (Repository Pattern)
+- **Morse-to-Text Übersetzung funktioniert** (korrekte Spacing-Logik)
+- **Signal Transmission nutzt richtigen Morse-Code**
+
+### 📝 Dokumentation
+- README.md in jedem Package
+- KDoc Kommentare für alle öffentlichen Klassen/Funktionen
+- Erklärung der Verantwortlichkeiten jeder Component
+
+### 🧩 Components (einzelne Dateien)
+1. InputCard.kt - Dual-Mode Input (Text/Morse)
+2. OutputCard.kt - Translation Display
+3. SignalVisualizer.kt - Visual Feedback
+4. InputModeSelector.kt - Mode Toggle
+5. OutputSelector.kt - Output Method Chips
+6. PlayButton.kt - Main Action Button
+7. HistoryItem.kt - List Item
+8. MorseKeyboard.kt - Custom Keyboard
+9. CameraScannerMockUI.kt - Scanner UI
+
+### 🔧 Technische Verbesserungen
+- ViewModel verwendet jetzt Repository Pattern
+- Hardware-Zugriff ausgelagert in MorseTransmitter
+- Business Logic getrennt in MorseDictionary
+- State Management zentralisiert im ViewModel
+
