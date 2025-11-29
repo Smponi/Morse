@@ -1,6 +1,6 @@
 # Changelog
 
-## 16/11/2025 - Initial UI/UX Implementation (Build erfolgreich ✓)
+## 16. November 2025 - 15:30 Uhr - Initial UI/UX Implementation (Build erfolgreich ✓)
 
 ### Implemented
 - **Design System** - Vollständiges Material 3 Theme System mit Custom Tokens
@@ -81,5 +81,26 @@
 
 ### Build-Status
 - ✓ Kompiliert erfolgreich (Android Debug)
-- ✓ Keine Material Icons Dependencies benötigt (verwendete Emoji/Unicode-Symbole)
+- ✓ Material Icons Extended integriert (für Android & iOS)
 - ✓ Alle Imports korrekt
+
+## 16. November 2025 - 16:00 Uhr - UI Refinements & Material Icons
+
+### Änderungen
+- **Material Icons Integration**
+  - Material Icons Extended hinzugefügt (compose.materialIconsExtended)
+  - Alle Icons durch native Material Icons ersetzt
+  - Icons: History, Settings, ArrowBack, ContentCopy, Share, PlayArrow, Stop
+
+- **HomeScreen Design Optimierungen**
+  - Spacing von lg auf md reduziert → kompakteres Layout
+  - Card Padding von cardPadding auf lg vereinheitlicht
+  - Textfeld minLines von 3 auf 2 reduziert
+  - Spacer-Höhen minimiert (xl → md, sm → xs)
+  - Weniger leere Flächen, dichteres UI
+
+- **Komponenten Verbesserungen**
+  - TextInputCard: kompakteres Padding, weniger Zeilen
+  - MorseInputCard: reduzierte Abstände zwischen Elementen
+  - OutputCard: einheitliches Spacing
+  - PlaybackPanel: Material Icons für Play/Stop Buttons

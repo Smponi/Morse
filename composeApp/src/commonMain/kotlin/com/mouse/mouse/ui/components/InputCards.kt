@@ -31,22 +31,22 @@ fun TextInputCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Layout.cardPadding)
+                .padding(Spacing.lg)
         ) {
             Text(
                 text = "Gib deinen Text ein",
                 style = MaterialTheme.typography.titleMedium
             )
 
-            Spacer(modifier = Modifier.height(Spacing.md))
+            Spacer(modifier = Modifier.height(Spacing.sm))
 
             OutlinedTextField(
                 value = text,
                 onValueChange = onTextChange,
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Dein Text...") },
-                minLines = 3,
-                maxLines = 5,
+                minLines = 2,
+                maxLines = 4,
                 shape = RoundedCornerShape(Radius.sm)
             )
 
@@ -78,7 +78,7 @@ fun MorseInputCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Layout.cardPadding),
+                .padding(Spacing.lg),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -86,11 +86,11 @@ fun MorseInputCard(
                 style = MaterialTheme.typography.titleMedium
             )
 
-            Spacer(modifier = Modifier.height(Spacing.xl))
+            Spacer(modifier = Modifier.height(Spacing.md))
 
             MorseTapButton(onTap = onMorseTap)
 
-            Spacer(modifier = Modifier.height(Spacing.lg))
+            Spacer(modifier = Modifier.height(Spacing.md))
 
             if (currentMorseSequence.isNotEmpty()) {
                 Text(
@@ -99,7 +99,7 @@ fun MorseInputCard(
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Spacer(modifier = Modifier.height(Spacing.md))
+                Spacer(modifier = Modifier.height(Spacing.sm))
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(Spacing.sm)

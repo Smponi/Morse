@@ -2,6 +2,9 @@ package com.mouse.mouse.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,7 +28,7 @@ fun OutputCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Layout.cardPadding)
+                .padding(Spacing.lg)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -38,17 +41,17 @@ fun OutputCard(
                 )
 
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-                    TextButton(onClick = onCopy) {
-                        Text("📋")
+                    IconButton(onClick = onCopy) {
+                        Icon(Icons.Default.ContentCopy, "Kopieren")
                     }
 
-                    TextButton(onClick = onShare) {
-                        Text("↗️")
+                    IconButton(onClick = onShare) {
+                        Icon(Icons.Default.Share, "Teilen")
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(Spacing.md))
+            Spacer(modifier = Modifier.height(Spacing.sm))
 
             if (outputText.isEmpty()) {
                 Text(

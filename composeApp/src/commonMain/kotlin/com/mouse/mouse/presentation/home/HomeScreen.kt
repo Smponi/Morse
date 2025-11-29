@@ -3,6 +3,9 @@ package com.mouse.mouse.presentation.home
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -32,13 +35,13 @@ fun HomeScreen(
                     )
                 },
                 navigationIcon = {
-                    TextButton(onClick = onNavigateToHistory) {
-                        Text("🕐")
+                    IconButton(onClick = onNavigateToHistory) {
+                        Icon(Icons.Default.History, "History")
                     }
                 },
                 actions = {
-                    TextButton(onClick = onNavigateToSettings) {
-                        Text("⚙️")
+                    IconButton(onClick = onNavigateToSettings) {
+                        Icon(Icons.Default.Settings, "Einstellungen")
                     }
                 }
             )
@@ -59,9 +62,9 @@ fun HomeScreen(
                 .padding(paddingValues)
                 .padding(horizontal = Layout.screenPaddingHorizontal)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(Spacing.lg)
+            verticalArrangement = Arrangement.spacedBy(Spacing.md)
         ) {
-            Spacer(modifier = Modifier.height(Spacing.sm))
+            Spacer(modifier = Modifier.height(Spacing.xs))
 
             // Mode Selector
             ModeSegmentedControl(
@@ -103,7 +106,7 @@ fun HomeScreen(
                 }
             )
 
-            Spacer(modifier = Modifier.height(Spacing.xl))
+            Spacer(modifier = Modifier.height(Spacing.md))
         }
     }
 }

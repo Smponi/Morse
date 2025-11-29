@@ -3,6 +3,9 @@ package com.mouse.mouse.ui.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,11 +47,20 @@ fun PlaybackPanel(
                     enabled = isPlayEnabled,
                     shape = RoundedCornerShape(Radius.pill)
                 ) {
+                    Icon(
+                        imageVector = if (playbackState == PlaybackState.PLAYING) {
+                            Icons.Default.Stop
+                        } else {
+                            Icons.Default.PlayArrow
+                        },
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(Spacing.sm))
                     Text(
                         text = if (playbackState == PlaybackState.PLAYING) {
-                            "◼ STOP"
+                            "STOP"
                         } else {
-                            "▶ PLAY"
+                            "PLAY"
                         }
                     )
                 }
