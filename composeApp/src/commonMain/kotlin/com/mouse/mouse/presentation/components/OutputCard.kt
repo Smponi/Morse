@@ -4,12 +4,18 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.text.AnnotatedString
+import kotlinx.coroutines.launch
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -28,6 +34,9 @@ fun OutputCard(
     label: String = "OUTPUT",
     playbackIndex: Int = -1
 ) {
+    val clipboardManager = LocalClipboardManager.current
+    val scope = rememberCoroutineScope()
+    
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -36,11 +45,34 @@ fun OutputCard(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(AppDimensions.Padding.cardMedium)) {
-            Text(
-                label,
-                style = MaterialTheme.typography.labelMedium,
-                color = Color.Gray
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    label,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = Color.Gray
+                )
+                
+                if (text.isNotEmpty()) {
+                    IconButton(
+                        onClick = {
+                            scope.launch {
+                                clipboardManager.setText(AnnotatedString(text))
+                            }
+                        }
+                    ) {
+                        Icon(
+                            Icons.Rounded.ContentCopy,
+                            contentDescription = "Copy",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(AppDimensions.IconSize.small)
+                        )
+                    }
+                }
+            }
             
             Spacer(modifier = Modifier.height(AppDimensions.Spacing.xSmall))
             

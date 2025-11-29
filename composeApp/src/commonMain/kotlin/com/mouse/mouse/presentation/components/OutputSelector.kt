@@ -30,41 +30,39 @@ fun OutputSelector(
     modes: List<OutputMode>,
     onToggle: (OutputMode) -> Unit
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            "OUTPUT METHOD",
-            style = MaterialTheme.typography.labelSmall,
-            color = Color.Gray
-        )
-        
-        Spacer(modifier = Modifier.height(AppDimensions.Spacing.xSmall))
-        
-        Row(horizontalArrangement = Arrangement.spacedBy(AppDimensions.Spacing.xSmall)) {
-            OutputMode.values().forEach { mode ->
-                val selected = modes.contains(mode)
-                
-                FilterChip(
-                    selected = selected,
-                    onClick = { onToggle(mode) },
-                    label = { Text(mode.name) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = when (mode) {
-                                OutputMode.VIBRATION -> Icons.Rounded.Vibration
-                                OutputMode.LIGHT -> Icons.Rounded.FlashOn
-                                OutputMode.SOUND -> Icons.AutoMirrored.Rounded.VolumeUp
-                            },
-                            contentDescription = null,
-                            modifier = Modifier.size(AppDimensions.IconSize.small)
-                        )
-                    },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                        selectedLabelColor = MaterialTheme.colorScheme.primary,
-                        selectedLeadingIconColor = MaterialTheme.colorScheme.primary
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(AppDimensions.Spacing.xSmall)
+    ) {
+        OutputMode.values().forEach { mode ->
+            val selected = modes.contains(mode)
+            
+            FilterChip(
+                selected = selected,
+                onClick = { onToggle(mode) },
+                label = { 
+                    Text(
+                        mode.name,
+                        style = MaterialTheme.typography.labelSmall
                     )
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = when (mode) {
+                            OutputMode.VIBRATION -> Icons.Rounded.Vibration
+                            OutputMode.LIGHT -> Icons.Rounded.FlashOn
+                            OutputMode.SOUND -> Icons.AutoMirrored.Rounded.VolumeUp
+                        },
+                        contentDescription = null,
+                        modifier = Modifier.size(AppDimensions.IconSize.small)
+                    )
+                },
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                    selectedLabelColor = MaterialTheme.colorScheme.primary,
+                    selectedLeadingIconColor = MaterialTheme.colorScheme.primary
                 )
-            }
+            )
         }
     }
 }

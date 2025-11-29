@@ -47,13 +47,13 @@ fun TransmitterScreen(viewModel: MorseSuiteViewModel) {
                 onModeChanged = { viewModel.toggleInputMode() }
             )
             
-            Spacer(modifier = Modifier.height(AppDimensions.Spacing.large))
+            Spacer(modifier = Modifier.height(AppDimensions.Spacing.medium))
 
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(AppDimensions.Spacing.large),
+                verticalArrangement = Arrangement.spacedBy(AppDimensions.Spacing.medium),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 SignalVisualizer(isSignalActive = viewModel.isSignalActive)
@@ -102,7 +102,7 @@ fun TransmitterScreen(viewModel: MorseSuiteViewModel) {
                     modes = viewModel.activeModes,
                     onToggle = { viewModel.toggleMode(it) }
                 )
-                Spacer(modifier = Modifier.height(AppDimensions.Spacing.medium))
+                Spacer(modifier = Modifier.height(AppDimensions.Spacing.small))
                 PlayButton(
                     isPlaying = viewModel.isPlaying,
                     onPlay = { scope.launch { viewModel.transmitSignal() } },

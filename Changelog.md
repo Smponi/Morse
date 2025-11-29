@@ -256,3 +256,81 @@ val ctx = getAndroidContext()
 - androidMain: **4 Files** (Platform-specific)
 - Sharing Rate: **~95%**
 
+
+## 29/11/2024 - 22:00 - Dependency Cleanup & UX Polish
+
+### 🧹 Dependencies Bereinigt
+
+**Entfernt (ungenutzt):**
+- ❌ Koin Dependency Injection (alle 4 Dependencies)
+  - `koin.android`
+  - `koin.androidx.compose`
+  - `koin.compose`
+  - `koin.compose.viewmodel`
+  - `koin.core`
+- ❌ Navigation Compose Library (2 Dependencies)
+  - `androidx.navigation3.runtime`
+  - `androidx.navigation3.ui`
+  - `navigation-compose:2.9.1`
+- ❌ Kotlin Serialization Plugin
+
+**Behalten (essentiell):**
+- ✅ Compose Multiplatform (UI Framework)
+- ✅ Material3 & Material Icons
+- ✅ Lifecycle ViewModel Compose
+- ✅ Activity Compose (Android)
+- ✅ Code Quality Tools (ktlint, detekt, kover)
+
+**Ergebnis:**
+- **-9 Dependencies** entfernt
+- Schnellere Build-Zeiten
+- Kleinere App-Größe
+- Weniger Komplexität
+
+### 🎨 UX Verbesserungen
+
+#### 1. Copy-to-Clipboard Feature
+- ✅ Copy Button in OutputCard (oben rechts)
+- ✅ Kopiert Morse-Code oder Text
+- ✅ Nur sichtbar wenn Inhalt vorhanden
+
+#### 2. Navigation Verbesserungen
+- ✅ History-Klick navigiert direkt zum Transmitter
+- ✅ Text wird automatisch geladen
+- ✅ User kann sofort weitermachen
+
+#### 3. Kompakteres Layout
+**Reduzierte Höhen:**
+- Visualizer: 100dp → 80dp (-20%)
+- Telegraph Pads: 160dp → 140dp (-12.5%)
+- Input Card (Morse): 180dp → 140dp (-22%)
+- Output Card: 80dp → 70dp (-12.5%)
+- Buttons: 64dp → 60dp (-6%)
+
+**Optimierte Spacing:**
+- Card-Abstände: 24dp → 16dp
+- Selector ↔ Button: 16dp → 12dp
+
+**Output Selector:**
+- ✅ "OUTPUT METHOD" Label entfernt
+- ✅ Chips nehmen volle Breite (`weight(1f)`)
+- ✅ Horizontale Row statt Column
+
+**Bottom Navigation:**
+- ✅ Keine Text-Labels (nur Icons)
+- ✅ Mehr Platz für Content
+- ✅ Cleaner Look
+
+### 📊 Ergebnis
+
+**Vorher:**
+- User musste scrollen um beide Cards zu sehen
+- Viele ungenutzte Dependencies
+- Bottom Bar verschwendet Platz
+
+**Jetzt:**
+- ✅ Beide Cards direkt sichtbar
+- ✅ 9 Dependencies weniger
+- ✅ Kompakte, effiziente UI
+- ✅ Copy-Funktion für bessere UX
+

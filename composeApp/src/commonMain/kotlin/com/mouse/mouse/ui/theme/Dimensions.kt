@@ -27,16 +27,16 @@ object AppDimensions {
     object Height {
         val buttonSmall: Dp = 48.dp         // Kleine Action Buttons
         val buttonMedium: Dp = 56.dp        // Standard Buttons (z.B. Transmit)
-        val buttonLarge: Dp = 64.dp         // Große wichtige Buttons
+        val buttonLarge: Dp = 60.dp         // Große wichtige Buttons (reduziert für Platz)
         
-        val keyboardRow: Dp = 64.dp         // Utility Row im Morse Keyboard
-        val telegraphPad: Dp = 160.dp       // Die großen Dot/Dash Pads
+        val keyboardRow: Dp = 60.dp         // Utility Row im Morse Keyboard (kompakter)
+        val telegraphPad: Dp = 140.dp       // Die großen Dot/Dash Pads (reduziert)
         
-        val inputCardMinMorse: Dp = 180.dp  // Mindesthöhe für Morse Terminal
+        val inputCardMinMorse: Dp = 140.dp  // Mindesthöhe für Morse Terminal (reduziert)
         val inputCardMinText: Dp = 0.dp     // Text Input passt sich an
         
-        val outputCardMin: Dp = 80.dp       // Minimale Höhe für Output Display
-        val visualizer: Dp = 100.dp         // Signal Visualizer Größe
+        val outputCardMin: Dp = 70.dp       // Minimale Höhe für Output Display (reduziert)
+        val visualizer: Dp = 80.dp          // Signal Visualizer Größe (kleiner)
     }
     
     // ==================== CORNER RADIUS ====================

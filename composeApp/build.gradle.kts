@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    kotlin("plugin.serialization") version "2.0.21"
     id("org.jlleitschuh.gradle.ktlint")
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.kotlinx.kover")
@@ -32,9 +31,6 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.koin.android)
-            implementation(libs.koin.androidx.compose)
-            implementation(libs.androidx.navigation3.ui)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -46,13 +42,6 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-
-            implementation(libs.androidx.navigation3.runtime)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            api(libs.koin.core)
-            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.1")
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

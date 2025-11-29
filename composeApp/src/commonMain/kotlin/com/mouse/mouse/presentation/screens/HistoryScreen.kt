@@ -16,9 +16,14 @@ import com.mouse.mouse.ui.theme.AppDimensions
  * Screen für History und Favoriten
  * 
  * @param showFavoritesOnly true = nur Favoriten anzeigen, false = alle Einträge
+ * @param onNavigateToTransmitter Callback um zum Transmitter zu navigieren
  */
 @Composable
-fun HistoryScreen(viewModel: MorseSuiteViewModel, showFavoritesOnly: Boolean) {
+fun HistoryScreen(
+    viewModel: MorseSuiteViewModel,
+    showFavoritesOnly: Boolean,
+    onNavigateToTransmitter: () -> Unit = {}
+) {
     val items = if (showFavoritesOnly) {
         viewModel.history.filter { it.isFavorite }
     } else {
@@ -50,7 +55,10 @@ fun HistoryScreen(viewModel: MorseSuiteViewModel, showFavoritesOnly: Boolean) {
                     HistoryItem(
                         record = record,
                         onFavoriteToggle = { viewModel.toggleFavorite(record.id) },
-                        onLoad = { viewModel.loadFromHistory(record.text) }
+                        onLoad = {
+                            viewModel.loadFromHistory(record.text)
+                            onNavigateToTransmitter()
+                        }
                     )
                 }
             }

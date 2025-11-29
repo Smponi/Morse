@@ -53,7 +53,7 @@ fun SignalVisualizer(isSignalActive: Boolean) {
     ) {
         Box(
             modifier = Modifier
-                .size(80.dp)
+                .size(64.dp)
                 .scale(scale)
                 .clip(CircleShape)
                 .background(color)
@@ -73,7 +73,7 @@ fun SignalVisualizer(isSignalActive: Boolean) {
                 },
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .size(AppDimensions.IconSize.large)
+                    .size(AppDimensions.IconSize.medium)
             )
         }
     }

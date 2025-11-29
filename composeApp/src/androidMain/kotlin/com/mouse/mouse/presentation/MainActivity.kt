@@ -66,8 +66,8 @@ fun MorseApp(viewModel: MorseSuiteViewModel = viewModel()) {
             ) {
                 Screen.values().forEach { screen ->
                     NavigationBarItem(
-                        icon = { Icon(screen.icon, contentDescription = null) },
-                        label = { Text(screen.label) },
+                        icon = { Icon(screen.icon, contentDescription = screen.label) },
+                        label = null,
                         selected = currentScreen == screen,
                         onClick = { currentScreen = screen },
                         colors = NavigationBarItemDefaults.colors(
@@ -86,8 +86,16 @@ fun MorseApp(viewModel: MorseSuiteViewModel = viewModel()) {
             ) { screen ->
                 when (screen) {
                     Screen.Transmitter -> TransmitterScreen(viewModel)
-                    Screen.History -> HistoryScreen(viewModel, showFavoritesOnly = false)
-                    Screen.Favorites -> HistoryScreen(viewModel, showFavoritesOnly = true)
+                    Screen.History -> HistoryScreen(
+                        viewModel,
+                        showFavoritesOnly = false,
+                        onNavigateToTransmitter = { currentScreen = Screen.Transmitter }
+                    )
+                    Screen.Favorites -> HistoryScreen(
+                        viewModel,
+                        showFavoritesOnly = true,
+                        onNavigateToTransmitter = { currentScreen = Screen.Transmitter }
+                    )
                 }
             }
         }
